@@ -35,64 +35,86 @@ function whoPlaysWhat(){
         );
     }
 
+
     function winCheck(){
         let userMovesArray = [];
         let botMovesArray = [];
-        let successA = 0;
-        // let successB = 0;
-        // let successC = 0;
-
+        let userObject = {};
+        let botObject = {};
+        let userCounter = 0;
+        let botCounter = 0;
+         
         function userFinalMove(user){
             userMovesArray.push(user);
-            for(let i = 0; i < userMovesArray.length; i++){ //doesnt work bc if first item 
-                console.log('userMovesArray[i]:');          //includes a, it will always call
-                console.log(userMovesArray[i]);             //successA and wont read beyond 
-                if(userMovesArray[i].includes('a', i)){     //beyond first item
-                    console.log('userMovesArray[i]:');
-                    console.log(userMovesArray[i]);
-                    successA++;
-                    console.log('successA: ' + successA);
-                    if(successA === 3){
-                        alert('You Have won (A)');
-                        // return true;
-                    };
-                } 
+            userCounter++;
+            for(let i = userCounter - 1; i < userCounter; i++){
+                //code below is for diagonal win
+                if(userMovesArray.includes('a1') && userMovesArray.includes('b2') && userMovesArray.includes('c3')){
+                    alert('You Win! [code: 0 - 4 - 8]');
+                } else if(userMovesArray.includes('a3') && userMovesArray.includes('b2') && userMovesArray.includes('c1')){
+                    alert('You Win! [code: 2 - 4 - 6]');
+                };
+
+                // code below is for row & column win
+                let letter = userMovesArray[i].slice(0, 1);
+                let number = userMovesArray[i].slice(1);
+                if(!userObject[letter]){
+                    userObject[letter] = 1;
+                } else {
+                    userObject[letter]++;
+                };
+
+                if(!userObject[number]){
+                    userObject[number] = 1;
+                } else {
+                    userObject[number]++;
+                };
+
+                if(userObject[letter] === 3){
+                    alert(`You Won! Letter ${letter} was played 3 times!`);
+                };
+                if(userObject[number] === 3){
+                    console.log(`You Won! Number ${number} appeared 3 times`);
+                };
             };
-            console.log('User Array: ');
-            console.log(userMovesArray);
-            // return user;
+            console.log(userObject);
         };
 
         function botFinalMove(bot){
             botMovesArray.push(bot);
-            // let successA = 0;
-            // let successB = 0;
-            // let successC = 0;
+            console.log(botMovesArray);
+            botCounter++;
+            for(let i = botCounter - 1; i < botCounter; i++){
+                //code below is for diagonal win
+                if(botMovesArray.includes('a1') && botMovesArray.includes('b2') && botMovesArray.includes('c3')){
+                    alert('You Lose! [code: 0 - 4 - 8]');
+                } else if(botMovesArray.includes('a3') && botMovesArray.includes('b2') && botMovesArray.includes('c1')){
+                    alert('You Lose! [code: 2 - 4 - 6]');
+                };
 
-            // for(let i = 0; i < botMovesArray.length; i++){
-            //     if(botMovesArray[i].includes('a', i)){
-            //         successA++;
-            //         if(successA === 3){
-            //             alert('You Lost (A)');
-            //             // return true;
-            //         };
-            //     } else if(botMovesArray[i].includes('b', i)){
-            //         successB++;
-            //         if(successB === 3){
-            //             alert('You Lost (B)');
-            //             // return true;
-            //         };
-            //     } else if(botMovesArray[i].includes('c', i)){
-            //         successC++;
-            //         if(successC === 3){
-            //             alert('You Lost (C)');
-            //             // return true;
-            //         };
-            //     } else{
-            //         console.log('not yet' + `$`);
-            //         // return false;
-            //     }; 
-            // };
+                // code below is for row & column win
+                let letter = botMovesArray[i].slice(0, 1);
+                let number = botMovesArray[i].slice(1);
+                if(!botObject[letter]){
+                    botObject[letter] = 1;
+                } else {
+                    botObject[letter]++;
+                };
+
+                if(!botObject[number]){
+                    botObject[number] = 1;
+                } else {
+                    botObject[number]++;
+                };
+
+                if(botObject[letter] === 3){
+                    alert(`You Lost! Bot played letter ${letter} 3 times!`);
+                };
+                if(botObject[number] === 3){
+                    console.log(`You Won! Number ${number} appeared 3 times`);
+                };
+            };
+            console.log(botObject);
         };
 
         return {
@@ -111,6 +133,7 @@ function whoPlaysWhat(){
                 break;
             };
         };
+        console.log('Player plays:');
         printGameTable();
         winCheckVar.userFinalMove(userSpot);
     };
@@ -118,9 +141,10 @@ function whoPlaysWhat(){
     let numArray = [];
     function getRandom(min = 0, max = 9){
         let num = Math.floor(Math.random() * (max - min) + min);
-        if(!(numArray.includes(num, 0))){
-            numArray.push(num);
+        while(numArray.includes(num, 0)){
+            num = Math.floor(Math.random() * (max - min) + min);
         };
+        numArray.push(num);
         console.log(numArray);
         num = numArray[numArray.length - 1];
         console.log('BOT PLAYS: ' + num);
@@ -131,32 +155,21 @@ function whoPlaysWhat(){
     //checks to make sure player cnanot overwrite opponent's move
     function botFightsBack(){
         let n = getRandom();
-        // console.log('gameTable[n]:');
-        // console.log(gameTable[n]);
-        if((gameTable[n] !== 'X') && (gameTable[n] !== 'O')){
-            // console.log('first route');
-            gameTable.splice(n, 1, bot); 
-            printGameTable();
-            winCheckVar.botFinalMove(gameTable[n]);
-        } 
-        else{
-            // console.log('second route');
+        while(((gameTable[n] == 'X') || (gameTable[n] == 'O'))){
+            console.log('second route');
             n = '';
             n = getRandom();
-            if((gameTable[n] !== 'X') && (gameTable[n] !== 'O')){
-                gameTable.splice(n, 1, bot); 
-                printGameTable();
-                winCheckVar.botFinalMove(gameTable[n]);
-            };
         };
+        console.log('first route');
+        let saveVar = gameTable[n];
+        gameTable.splice(n, 1, bot); 
+        printGameTable();
+        winCheckVar.botFinalMove(saveVar);
     };
 
     for(let i = 0; i < 10; i++){
         getUserInput();
         botFightsBack();
-        winCheck();
-        // winCheckVar.userFinalMove();
-        // winCheckVar.botFinalMove();
     };
     
     return {
