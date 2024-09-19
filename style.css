@@ -5,6 +5,187 @@ body{
     display: flex; 
     flex-flow: column wrap;
     background-color: #252432;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.parent-container{
+    width: 100vw; /* fix dis */
+    height: 99vh;
+    display: grid;
+    grid-template-columns: 250px 4fr 250px;
+}
+
+.child-container{
+    grid-area: 1 / 2;
+    background-color: #ccc;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 100px 650px;
+    align-items: center;
+    justify-items: center;
+}
+
+.child-container > h1{
+    font-size: 50px;
+    /* font-family: ;  do dis later */
+}
+
+.baby-container{
+    width: 80vh;
+    height: 65vh;
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 30px;
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+}
+
+.baby-container > h1{
+    margin: 10px auto;
+    font-size: 50px;
+}
+
+.zygote-container{
+    display: flex;
+    gap: 30px;
+}
+
+.opponent{
+    width: 70%;
+    height: 100%; 
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.opponent > h2{
+    position: absolute;
+    z-index: 1;
+}
+
+.player-opponent{
+    width: 100%;
+    height: 100%;
+    background-image: url(images/player.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+}
+
+.bot-opponent{
+    background-image: url(images/spinner2.gif);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
     color: white;
-    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.player-opponent:hover, .bot-opponent:hover{
+    cursor: pointer;
+    box-shadow: 20px;
+    border: 3px solid black;
+    border-radius: 20px;
+    background-color: #252432;
+}
+
+
+
+
+#double-image{
+    background-image: url(images/biden.avif);
+    background-size: 100% 100%;
+}
+
+.double-image-1{
+    width: 100%;
+}
+
+#double-image2{
+    background-image: url(images/Q5LP.gif);
+    background-size: 100% 100%;
+}
+
+img[src="images/nyan-cat.gif"]{
+    height: 99vh;
+    width: 850px;
+    transform: rotate(90deg);
+    object-fit: contain;
+    object-position: 90% 120%;
+}
+
+
+/* first popup */
+.mainDiv{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+}
+
+.xSign, .oSign{
+    font-size: 90px;
+    font-weight: bold;
+}
+
+.xSign{
+    background-image: linear-gradient(to top, black, pink, indigo, blue, green, yellow, orange, red, white, black);
+    color: transparent;
+    background-clip: text;    
+}
+.oSign{
+    background-image: url(images/jkjk.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: transparent;
+    background-clip: text;
+}
+
+
+/* table code */
+.gameBoard{
+    width: 400px;
+    height: 400px;
+    background-color: slateblue;
+    border-radius: 10px;
+}
+
+.tbody{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.tableRow{
+    height: 33%;
+    display: flex;
+};
+
+/* bug -> if i remove this, the grid dissapears */
+.tableRow > div{}
+
+.a1, .a2, .a3, .b1, .b2, .b3, .c1, .c2, .c3{
+    border: 3px solid black;
+    width: 33%;
+}
+
+.a1, .b1, .c1{
+    border-left: none;
+}
+
+.a1, .a2, .a3{
+    border-top: none;
+}
+
+.a3, .b3, .c3{
+    border-right: none;
+}
+
+.c1, .c2, .c3{
+    border-bottom: none;
 }

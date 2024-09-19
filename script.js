@@ -1,17 +1,24 @@
+let botOpponent = document.querySelector('.bot-opponent');
+let personOpponent = document.querySelector('#person-opponent');
+let chooseH1 = document.querySelector('#choose-h1');
+let babyContainer = document.querySelector('.baby-container');
+
+
 const gameTable = [
     'a1', 'a2', 'a3',
     'b1', 'b2', 'b3',
     'c1', 'c2', 'c3'
 ];
 
+                     //userPlays
 function whoPlaysWhat(){
     // let userChoice = prompt(`To play against bot, type 'bot'. For another player, type 'player': `, '').toLowerCase();
     // console.log(userChoice);
 
-    //user original choice
+    //vairable that stores user's sign choice
     let  userPlays = prompt('Choose your player: X or O', '').toUpperCase();
 
-    //user input stored
+    //variable that stores user input
     let userSpot;
 
     //reusable security check
@@ -35,7 +42,11 @@ function whoPlaysWhat(){
         );
     }
 
+    printGameTable();
 
+    let userCopyArray = [];
+
+    //WINCHECK START
     function winCheck(){
         let userMovesArray = [];
         let botMovesArray = [];
@@ -46,18 +57,21 @@ function whoPlaysWhat(){
          
         function userFinalMove(user){
             userMovesArray.push(user);
+            userCopyArray.push(user);
             userCounter++;
             for(let i = userCounter - 1; i < userCounter; i++){
                 //code below is for diagonal win
                 if(userMovesArray.includes('a1') && userMovesArray.includes('b2') && userMovesArray.includes('c3')){
-                    alert('You Win! [code: 0 - 4 - 8]');
+                    console.log('You Win! [code: 0 - 4 - 8]');
+                    return false;
                 } else if(userMovesArray.includes('a3') && userMovesArray.includes('b2') && userMovesArray.includes('c1')){
-                    alert('You Win! [code: 2 - 4 - 6]');
+                    console.log('You Win! [code: 2 - 4 - 6]');
+                    return false;
                 };
 
                 // code below is for row & column win
                 let letter = userMovesArray[i].slice(0, 1);
-                let number = userMovesArray[i].slice(1);
+                let number = userMovesArray[i].slice(1);   
                 if(!userObject[letter]){
                     userObject[letter] = 1;
                 } else {
@@ -71,25 +85,29 @@ function whoPlaysWhat(){
                 };
 
                 if(userObject[letter] === 3){
-                    alert(`You Won! Letter ${letter} was played 3 times!`);
+                    console.log(`You Won! Letter ${letter} was played 3 times!`);
+                    return false;
+                    
                 };
                 if(userObject[number] === 3){
                     console.log(`You Won! Number ${number} appeared 3 times`);
+                    return false;
                 };
             };
-            console.log(userObject);
+            return true;
         };
 
         function botFinalMove(bot){
             botMovesArray.push(bot);
-            console.log(botMovesArray);
             botCounter++;
             for(let i = botCounter - 1; i < botCounter; i++){
                 //code below is for diagonal win
                 if(botMovesArray.includes('a1') && botMovesArray.includes('b2') && botMovesArray.includes('c3')){
-                    alert('You Lose! [code: 0 - 4 - 8]');
+                    console.log('You Lose! [code: 0 - 4 - 8]');
+                    return false;
                 } else if(botMovesArray.includes('a3') && botMovesArray.includes('b2') && botMovesArray.includes('c1')){
-                    alert('You Lose! [code: 2 - 4 - 6]');
+                    console.log('You Lose! [code: 2 - 4 - 6]');
+                    return false;
                 };
 
                 // code below is for row & column win
@@ -108,34 +126,50 @@ function whoPlaysWhat(){
                 };
 
                 if(botObject[letter] === 3){
-                    alert(`You Lost! Bot played letter ${letter} 3 times!`);
+                    console.log(`You Lost! Bot played letter ${letter} 3 times!`);
+                    return false;
                 };
                 if(botObject[number] === 3){
                     console.log(`You Won! Number ${number} appeared 3 times`);
+                    return false;
                 };
             };
-            console.log(botObject);
+            return true;
         };
 
         return {
             userFinalMove,
-            botFinalMove
+            botFinalMove,
         };
-    }
+    };
+    //WINCHECK END
 
     var winCheckVar = winCheck();
 
     function getUserInput(){
-        userSpot = prompt(`Enter the name of the field you want to play, like a2: `, '').toLowerCase();
-        for(let i = 0; i < 9; i++){
-            if(gameTable[i] === userSpot){
-                gameTable.splice(i, 1, userPlays);
-                break;
+        let count = 0;
+        for(let x = 0; x < (count + 1); x++){
+            userSpot = prompt(`Enter the name of the field you want to play, like a2: `, '').toLowerCase();
+            for(let i = 0; i < gameTable.length; i++){
+                if(gameTable[i] === userSpot){
+                    if((gameTable[i] !== 'X') || (gameTable[i] !== 'O')){
+                        gameTable.splice(i, 1, userPlays);
+                        console.log('Player plays: ' + userSpot);
+                        printGameTable(); 
+                        if(winCheckVar.userFinalMove(userSpot) == false){
+                            return false;
+                        } 
+                        else if(userCopyArray.length === 5){
+                            return console.log(`It's a draw!`); 
+                        } else{
+                            return true;
+                        };
+                    } else break;
+                };
             };
+            alert('That field is not available. Please choose another.');
+            count++;
         };
-        console.log('Player plays:');
-        printGameTable();
-        winCheckVar.userFinalMove(userSpot);
     };
 
     let numArray = [];
@@ -145,45 +179,42 @@ function whoPlaysWhat(){
             num = Math.floor(Math.random() * (max - min) + min);
         };
         numArray.push(num);
-        console.log(numArray);
         num = numArray[numArray.length - 1];
-        console.log('BOT PLAYS: ' + num);
         return num;
     };
 
 
-    //checks to make sure player cnanot overwrite opponent's move
+    //checks to make sure bot cannot overwrite human's move
     function botFightsBack(){
+        if(userCopyArray.length === 5){
+            return false;
+        };
         let n = getRandom();
         while(((gameTable[n] == 'X') || (gameTable[n] == 'O'))){
-            console.log('second route');
             n = '';
             n = getRandom();
         };
-        console.log('first route');
         let saveVar = gameTable[n];
         gameTable.splice(n, 1, bot); 
+        console.log('Bot plays: ' + saveVar);
         printGameTable();
-        winCheckVar.botFinalMove(saveVar);
+
+        //condition for game to stop if bot wins
+        if(winCheckVar.botFinalMove(saveVar) == false){
+            return false;
+        };
+        return true;
     };
 
-    for(let i = 0; i < 10; i++){
-        getUserInput();
-        botFightsBack();
+    while(getUserInput() && botFightsBack()){
+        console.log('');
     };
-    
-    return {
-        winCheck,
-        userPlays,
-        bot,
-        printGameTable,
-        getUserInput,
+
+    return{
         botFightsBack,
+        winCheck
     };
-}
+};
 
 const variable = whoPlaysWhat();
 variable.winCheck();
-variable.printGameTable();
-variable.getUserInput();
-variable.botFightsBack();
