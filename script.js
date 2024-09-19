@@ -12,27 +12,9 @@ const gameTable = [
 
                      //userPlays
 function whoPlaysWhat(){
-    // let userChoice = prompt(`To play against bot, type 'bot'. For another player, type 'player': `, '').toLowerCase();
-    // console.log(userChoice);
-
-    //vairable that stores user's sign choice
-    let  userPlays = prompt('Choose your player: X or O', '').toUpperCase();
-
-    //variable that stores user input
-    let userSpot;
-
-    //reusable security check
-    while(!(userPlays === 'X' || userPlays === 'x' || userPlays === 'O' || userPlays === 'o')){
-        alert('Please enter X or O.');
-        userPlays = prompt('Choose your player: X or O', '').toUpperCase();
-    };
-
-
-    //bot chooses sign
     let bot = '';
-    if(userPlays === 'X' || userPlays === 'x'){
-        bot = 'O';
-    } else bot = 'X';
+    let userPlays, userPlays2;
+    let userSpot, userSpot2;    
 
     function printGameTable(){
         console.log(
@@ -49,10 +31,13 @@ function whoPlaysWhat(){
     //WINCHECK START
     function winCheck(){
         let userMovesArray = [];
+        let user2MovesArray = [];
         let botMovesArray = [];
         let userObject = {};
+        let user2Object = {};
         let botObject = {};
         let userCounter = 0;
+        let userCounter2 = 0;
         let botCounter = 0;
          
         function userFinalMove(user){
@@ -91,6 +76,47 @@ function whoPlaysWhat(){
                 };
                 if(userObject[number] === 3){
                     console.log(`You Won! Number ${number} appeared 3 times`);
+                    return false;
+                };
+            };
+            return true;
+        }; 
+
+        function user2FinalMove(user){
+            user2MovesArray.push(user);
+            userCounter2++;
+            for(let i = userCounter2 - 1; i < userCounter2; i++){
+                //code below is for diagonal win
+                if(user2MovesArray.includes('a1') && user2MovesArray.includes('b2') && user2MovesArray.includes('c3')){
+                    console.log('The other guy Won! [code: 0 - 4 - 8]');
+                    return false;
+                } else if(user2MovesArray.includes('a3') && user2MovesArray.includes('b2') && user2MovesArray.includes('c1')){
+                    console.log('The other guy Won! [code: 2 - 4 - 6]');
+                    return false;
+                };
+
+                // code below is for row & column win
+                let letter = user2MovesArray[i].slice(0, 1);
+                let number = user2MovesArray[i].slice(1);   
+                if(!user2Object[letter]){
+                    user2Object[letter] = 1;
+                } else {
+                    user2Object[letter]++;
+                };
+
+                if(!user2Object[number]){
+                    user2Object[number] = 1;
+                } else {
+                    user2Object[number]++;
+                };
+
+                if(user2Object[letter] === 3){
+                    console.log(`The other guy Won! Letter ${letter} was played 3 times!`);
+                    return false;
+                    
+                };
+                if(user2Object[number] === 3){
+                    console.log(`The other guy Won! Number ${number} appeared 3 times`);
                     return false;
                 };
             };
@@ -139,6 +165,7 @@ function whoPlaysWhat(){
 
         return {
             userFinalMove,
+            user2FinalMove,
             botFinalMove,
         };
     };
@@ -157,6 +184,32 @@ function whoPlaysWhat(){
                         console.log('Player plays: ' + userSpot);
                         printGameTable(); 
                         if(winCheckVar.userFinalMove(userSpot) == false){
+                            return false;
+                        } 
+                        else if(userCopyArray.length === 5){
+                            return console.log(`It's a draw!`); 
+                        } else{
+                            return true;
+                        };
+                    } else break;
+                };
+            };
+            alert('That field is not available. Please choose another.');
+            count++;
+        };
+    };
+
+    function getUser2Input(){
+        let count = 0;
+        for(let x = 0; x < (count + 1); x++){
+            userSpot2 = prompt(`Enter the name of the field you want to play, like a2: `, '').toLowerCase();
+            for(let i = 0; i < gameTable.length; i++){
+                if(gameTable[i] === userSpot2){
+                    if((gameTable[i] !== 'X') || (gameTable[i] !== 'O')){
+                        gameTable.splice(i, 1, userPlays2);
+                        console.log('Player 2 plays: ' + userSpot2);
+                        printGameTable(); 
+                        if(winCheckVar.user2FinalMove(userSpot2) == false){
                             return false;
                         } 
                         else if(userCopyArray.length === 5){
@@ -206,8 +259,49 @@ function whoPlaysWhat(){
         return true;
     };
 
-    while(getUserInput() && botFightsBack()){
-        console.log('');
+    let userChoice = prompt(`To play against bot, type 'bot'. For another player, type 'player': `, '').toLowerCase();
+    console.log(userChoice);
+    if(userChoice === 'bot'){
+        userPlays = prompt('Choose your player: X or O', '').toUpperCase();
+
+        //reusable security check
+        while(!(userPlays === 'X' || userPlays === 'x' || userPlays === 'O' || userPlays === 'o')){
+            alert('Please enter X or O.');
+            userPlays = prompt('Choose your player: X or O', '').toUpperCase();
+        };
+        
+        //bot chooses sign
+        if(userPlays === 'X' || userPlays === 'x'){
+            bot = 'O';
+        } else bot = 'X';
+        
+        //game starts
+        while(getUserInput() && botFightsBack()){
+            console.log('');
+        };
+    } 
+    else if(userChoice === 'player'){
+        userPlays = prompt('Choose your player: X or O', '').toUpperCase();
+
+        //reusable security check
+        while(!(userPlays === 'X' || userPlays === 'x' || userPlays === 'O' || userPlays === 'o')){
+            alert('Please enter X or O.');
+            userPlays = prompt('Choose your player: X or O', '').toUpperCase();
+        };
+
+        //variable that stores user input
+        if((userPlays === 'x' || userPlays === 'X')){
+            userPlays2 = 'O';
+        } else if((userPlays === 'o' || userPlays === 'O')){
+            userPlays2 = 'X';
+        }; 
+
+        //game starts 
+        while(getUserInput() && getUser2Input()){
+            console.log('');
+        };
+    } else{
+        alert('invalid, like wtf u want dis game was written on 13+ redbulls and 6h sleep session why u joking with me rn put the fries in the bag lil bro sid down mfk if u cant type in one or the other eat your high school 12th grade graduation paper so ur iq can rise back to average so u know how to write and speak again cuz this 0/10 gyat uneducated fuck cant read and write like an average ape');
     };
 
     return{
