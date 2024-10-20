@@ -9,8 +9,8 @@ body{
 }
 
 .parent-container{
-    width: 100vw; /* fix dis */
-    height: 99vh;
+    width: 100vw; 
+    height: 100vh;
     display: grid;
     grid-template-columns: 250px 4fr 250px;
 }
@@ -28,10 +28,9 @@ body{
 
 .child-container > h1{
     font-size: 50px;
-    /* font-family: ;  do dis later */
 }
 
-.baby-container{
+.baby-container, .board-box{
     width: 80vh;
     height: 65vh;
     background-color: #fff;
@@ -42,9 +41,18 @@ body{
     grid-template-rows: 1fr 3fr;
 }
 
-.baby-container > h1{
+.board-box{
+    justify-items: center;
+}
+
+.baby-container > h1, .board-box > h1{
     margin: 10px auto;
     font-size: 50px;
+}
+
+.board-box > h2{
+    margin: 7px auto;
+    font-size: 35px;
 }
 
 .zygote-container{
@@ -109,12 +117,9 @@ body{
     background-size: 100% 100%;
 }
 
-img[src="images/nyan-cat.gif"]{
-    height: 99vh;
-    width: 850px;
-    transform: rotate(90deg);
-    object-fit: contain;
-    object-position: 90% 120%;
+img[src="images/nyan.png"]{
+    height: 99%;
+    width: 99%;
 }
 
 
@@ -124,12 +129,12 @@ img[src="images/nyan-cat.gif"]{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 100px;
+    gap: 250px;
 }
 
 .xSign, .oSign{
-    font-size: 90px;
-    font-weight: bold;
+    font-size: 5.8rem;
+    cursor: pointer;
 }
 
 .xSign{
@@ -151,7 +156,10 @@ img[src="images/nyan-cat.gif"]{
 .gameBoard{
     width: 400px;
     height: 400px;
-    background-color: slateblue;
+    background-image: url(images/p1.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     border-radius: 10px;
 }
 
@@ -162,7 +170,7 @@ img[src="images/nyan-cat.gif"]{
 }
 
 .tableRow{
-    height: 33%;
+    height: 133px;
     display: flex;
 };
 
@@ -171,21 +179,81 @@ img[src="images/nyan-cat.gif"]{
 
 .a1, .a2, .a3, .b1, .b2, .b3, .c1, .c2, .c3{
     border: 3px solid black;
-    width: 33%;
+    width: 133px;
+    height: 133px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.a1, .b1, .c1{
+.a1, .b1, .c1, .a3, .b3, .c3{
     border-left: none;
+    border-right: none;
 }
 
 .a1, .a2, .a3{
     border-top: none;
 }
 
-.a3, .b3, .c3{
-    border-right: none;
+.c1, .c2, .c3{
+    border-top: none;
+    border-bottom: none;
 }
 
-.c1, .c2, .c3{
-    border-bottom: none;
+
+/* for showing lyrics */
+:root {
+    --slider-width: 400px;
+}
+
+.parentDiv{
+    display: flex;
+    gap: 7px;
+}
+  
+.titleSong{
+    font-size:26px; 
+}
+  
+.slider {
+    width: var(--slider-width);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.text {
+    font-size:26px; 
+    display: inline-block;
+    animation: slide 40s linear infinite;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(0%);
+    }
+
+    50% {
+        transform: translateX(calc(-100% + var(--slider-width)));
+    }
+    
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+/* code for slower appearance of icon */
+.sign{
+    animation: fadeInAnimation ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation{
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
