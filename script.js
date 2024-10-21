@@ -243,14 +243,6 @@ class User{
     addMove(move){
         this.array.push(move);
     };
-
-    // getBotInput(){
-    //     let input = '';
-    //     if(!this.isPlayer){
-    //         input = board.getRandom();
-    //     };
-    //     return input;
-    // };
 };
 
 
@@ -359,19 +351,26 @@ function humanPlays(div){
     mainLoop();
 };
 
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
+async function testing(){
+    let whoPlaysH2 = document.querySelector('.whoPlaysText');
+    while ((count != 9) && (!win)){
+        await delay(1000);
+        let move;
+        do{
+            move = board.getRandom();
+        } while(!whileLoopFunc(move, whoPlaysH2));
+    };
+};
+
 function mainLoop(){
     let whoPlaysH2 = document.querySelector('.whoPlaysText');
 
     if((userChoice === 'bot') && (userChoice2 === 'bot')){
-        while ((count != 9) && (!win)){
-            let move;
-            do{
-                setTimeout(() => {
-                    console.log('fun');
-                }, 2000);
-                move = board.getRandom();
-            } while(!whileLoopFunc(move, whoPlaysH2));
-        };
+        testing();
     } else if(!playerGetter.getCP().isPlayer){
         if((count != 9) && (!win)){
             setTimeout(() => {
